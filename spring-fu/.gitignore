@@ -1,0 +1,5 @@
+.gradle
+.idea
+build
+kofu.code-workspace
+local.properties

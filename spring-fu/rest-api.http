@@ -1,0 +1,8 @@
+GET http://localhost:8080/
+Accept: */*
+Cache-Control: no-cache
+
+###
+
+GET http://localhost:8080/greetings/
+
