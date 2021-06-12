@@ -12,17 +12,26 @@ import java.time.Duration
 class ResilienceConfig(
     val circuitBreakerRegistry: CircuitBreakerRegistry
 ) {
+    val circuitBreakerConfig = CircuitBreakerConfig.custom()
+        .slidingWindow(3, 3, COUNT_BASED)
+        .waitDurationInOpenState(Duration.ofMillis(5000))
+        .failureRateThreshold(0.5f)
+        .build()
 
-    @Bean
+    @Bean("catCircuitBreaker")
     fun catCircuitBreaker(): CircuitBreaker {
-        val circuitBreakerConfig = CircuitBreakerConfig.custom()
-            .slidingWindow(3, 3, COUNT_BASED)
-            .waitDurationInOpenState(Duration.ofMillis(5000))
-            .failureRateThreshold(0.5f)
-            .build()
         return circuitBreakerRegistry.circuitBreaker(
             "CatCCB",
             circuitBreakerConfig
         )
     }
+
+    @Bean("dogCircuitBreaker")
+    fun dogCircuitBreaker(): CircuitBreaker {
+        return circuitBreakerRegistry.circuitBreaker(
+            "DogCCB",
+            circuitBreakerConfig
+        )
+    }
+
 }

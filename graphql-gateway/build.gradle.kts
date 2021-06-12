@@ -27,6 +27,7 @@ dependencies {
 	implementation("com.graphql-java-kickstart:graphql-java-tools:_")
 
 	implementation("io.github.resilience4j:resilience4j-reactor:_")
+	implementation("io.github.resilience4j:resilience4j-kotlin:_")
 	implementation("io.github.resilience4j:resilience4j-spring-boot2:_")
 	implementation("io.github.resilience4j:resilience4j-circuitbreaker:_")
 
