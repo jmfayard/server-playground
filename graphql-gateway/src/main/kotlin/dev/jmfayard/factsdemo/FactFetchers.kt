@@ -1,7 +1,5 @@
 package dev.jmfayard.factsdemo
 
-import graphql.schema.DataFetcher
-import graphql.schema.DataFetchingEnvironment
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator
 import org.springframework.http.HttpHeaders
@@ -11,13 +9,12 @@ import org.springframework.web.reactive.function.client.WebClient
 import java.time.Duration
 import java.util.concurrent.CompletionStage
 
-interface FactFetcher : DataFetcher<CompletionStage<Fact?>>
 
 @Component
 class DogFactFetcher(
     val webClient: WebClient
-) : FactFetcher {
-    override fun get(environment: DataFetchingEnvironment): CompletionStage<Fact?> =
+) {
+    fun get(): CompletionStage<Fact?> =
         webClient.get().uri("https://some-random-api.ml/facts/dog")
             .accept(MediaType.APPLICATION_JSON)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -27,7 +24,7 @@ class DogFactFetcher(
                 Fact(
                     fact = it.fact,
                     length = it.fact.length,
-                    latency = calculateDuration(timestampFromEnv(environment))
+                    latency = calculateDuration(timestampFromEnv())
                 )
             }
             .toFuture()
@@ -37,8 +34,8 @@ class DogFactFetcher(
 class CatFactFetcher(
     val webClient: WebClient,
     val catCircuitBreaker: CircuitBreaker
-) : FactFetcher {
-    override fun get(environment: DataFetchingEnvironment): CompletionStage<Fact?> =
+)  {
+    fun get(): CompletionStage<Fact?> =
         webClient.get().uri("https://catfact.ninja/fact")
             .accept(MediaType.APPLICATION_JSON)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -48,7 +45,7 @@ class CatFactFetcher(
                 Fact(
                     fact = it.fact,
                     length = it.length,
-                    latency = calculateDuration(timestampFromEnv(environment))
+                    latency = calculateDuration(timestampFromEnv())
                 )
             }
             .timeout(Duration.ofMillis(2500))
@@ -63,4 +60,4 @@ data class CatFact(val fact: String, val length: Int)
 fun calculateDuration(timestamp: Long?): Long? =
     timestamp?.let { System.currentTimeMillis() - it }
 
-fun timestampFromEnv(env: DataFetchingEnvironment): Long = env.getContext()
+fun timestampFromEnv(): Long = 0L
