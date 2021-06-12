@@ -4,5 +4,16 @@ Cache-Control: no-cache
 
 ###
 
-GET http://localhost:8080/greetings/
+GET http://localhost:8080/api/user
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/user/sdeleuze
+Accept: application/json
+
+###
+
+GET http://localhost:8080/conf
+Accept: application/json
 
