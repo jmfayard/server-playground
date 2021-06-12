@@ -1,4 +1,4 @@
-package dev.jmfayard.factsdemo
+package dev.jmfayard.factsdemo.config
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig

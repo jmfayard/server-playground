@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management")
 	kotlin("jvm")
 	kotlin("plugin.spring")
+	kotlin("plugin.serialization")
 }
 
 group = "dev.jmfayard"
@@ -28,8 +29,14 @@ dependencies {
 	implementation("io.github.resilience4j:resilience4j-reactor:_")
 	implementation("io.github.resilience4j:resilience4j-spring-boot2:_")
 	implementation("io.github.resilience4j:resilience4j-circuitbreaker:_")
+
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
+
+	implementation(Ktor.client.core)
+	implementation(Ktor.client.okHttp)
+	implementation(Ktor.client.serialization)
+	implementation(KotlinX.serialization.core)
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
