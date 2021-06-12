@@ -2,6 +2,8 @@ package dev.jmfayard
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.reactive.awaitFirst
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -20,8 +22,8 @@ class HttpBinHandler(
     suspend fun post(request: ServerRequest): ServerResponse =
         request.sendHttpBinResponse {
             data = request.awaitBody()
-            // FIXME Caused by: com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot construct instance of `java.util.LinkedHashMap` (although at least one Creator exists): no String-argument constructor/factory method to deserialize from String value ('{
-            //json = objectMapper.convertValue(data!!, treeToMap)
+            val node = jacksonObjectMapper().readTree(data!!) as ObjectNode
+            json = node.fieldNames().asSequence().associate { it to node.get(it).textValue() }
         }
 }
 
