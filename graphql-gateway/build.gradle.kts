@@ -20,6 +20,10 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("com.graphql-java-kickstart:graphql-java-tools:_")
+	implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:_")
+	implementation("com.graphql-java-kickstart:graphiql-spring-boot-starter:_")
+	implementation("com.graphql-java-kickstart:graphql-java-tools:_")
 
 	implementation("io.github.resilience4j:resilience4j-reactor:_")
 	implementation("io.github.resilience4j:resilience4j-spring-boot2:_")

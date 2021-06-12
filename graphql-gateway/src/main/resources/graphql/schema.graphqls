@@ -6,7 +6,6 @@ type Query {
 type Fact {
   fact: String
   length: Int
-  latency: Long!
+  latency: Int!
 }
 
-scalar Long
