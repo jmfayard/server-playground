@@ -1,0 +1,12 @@
+type Query {
+  cat: Fact
+  dog: Fact
+}
+
+type Fact {
+  fact: String
+  length: Int
+  latency: Long!
+}
+
+scalar Long
