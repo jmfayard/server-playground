@@ -1,4 +1,4 @@
-package com.atlassian.jsw.factsdemo
+package dev.jmfayard.factsdemo
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,4 +1,4 @@
-package com.atlassian.jsw.factsdemo
+package dev.jmfayard.factsdemo
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig

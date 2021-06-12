@@ -1,4 +1,4 @@
-package com.atlassian.jsw.factsdemo
+package dev.jmfayard.factsdemo
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

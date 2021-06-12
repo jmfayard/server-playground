@@ -1,4 +1,4 @@
-package com.atlassian.jsw.factsdemo
+package dev.jmfayard.factsdemo
 
 import graphql.ExecutionInput
 import graphql.ExecutionResult

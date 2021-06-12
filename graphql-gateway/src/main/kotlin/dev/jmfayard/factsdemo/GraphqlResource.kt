@@ -1,4 +1,4 @@
-package com.atlassian.jsw.factsdemo
+package dev.jmfayard.factsdemo
 
 import graphql.schema.idl.SchemaPrinter
 import org.slf4j.Logger
