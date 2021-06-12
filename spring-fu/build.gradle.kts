@@ -20,6 +20,8 @@ dependencies {
         exclude("org.junit.vintage", "junit-vintage-engine")
     }
     testImplementation("io.projectreactor:reactor-test")
+    testImplementation(Testing.kotest.core)
+    testImplementation(Testing.kotest.assertions.core)
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
