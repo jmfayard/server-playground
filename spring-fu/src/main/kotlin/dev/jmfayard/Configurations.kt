@@ -33,6 +33,7 @@ val dataConfig = configuration {
 val webConfig = configuration {
     beans {
         bean<UserHandler>()
+        bean<HttpBinHandler>()
         bean(::routes)
     }
     webFlux {
