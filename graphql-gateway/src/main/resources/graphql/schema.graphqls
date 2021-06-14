@@ -1,11 +1,11 @@
 type Query {
-  cat: Fact
-  dog: Fact
+  cat: Fact!
+  dog: Fact!
 }
 
 type Fact {
-  fact: String
-  length: Int
+  fact: String!
+  length: Int!
   latency: Int!
 }
 

@@ -17,12 +17,12 @@ class DogFactQueryResolver(
     suspend fun dog(): Fact {
         val start = System.currentTimeMillis()
 
-        val catFact = dogCircuitBreaker.executeSuspendFunction {
+        val dogFact = dogCircuitBreaker.executeSuspendFunction {
             ktorClient.get<DogFact>(DOG_FACT_URL)
         }
         return Fact(
-            fact = catFact.fact,
-            length = catFact.fact.length,
+            fact = dogFact.fact,
+            length = dogFact.fact.length,
             latency = calculateDuration(start)
         )
     }
