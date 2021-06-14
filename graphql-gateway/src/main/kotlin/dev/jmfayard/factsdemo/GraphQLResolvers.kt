@@ -7,13 +7,23 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import org.springframework.stereotype.Component
 
-
 @Component
-class DogFactQueryResolver(
-    val ktorClient: HttpClient,
-    val dogCircuitBreaker: CircuitBreaker
+class AnimalsQueryResolver(
+    val animalsRepository: AnimalsRepository
 ) : GraphQLQueryResolver {
 
+    suspend fun dog(): Fact = animalsRepository.dog()
+
+    suspend fun cat(): Fact = animalsRepository.cat()
+}
+
+
+@Component
+class AnimalsRepository(
+    val ktorClient: HttpClient,
+    val dogCircuitBreaker: CircuitBreaker,
+    val catCircuitBreaker: CircuitBreaker
+) {
     suspend fun dog(): Fact {
         val start = System.currentTimeMillis()
 
@@ -23,16 +33,10 @@ class DogFactQueryResolver(
         return Fact(
             fact = dogFact.fact,
             length = dogFact.fact.length,
-            latency = calculateDuration(start)
+            latency = (System.currentTimeMillis() - start).toInt()
         )
     }
-}
 
-@Component
-class CatFactQueryResolver(
-    val ktorClient: HttpClient,
-    val catCircuitBreaker: CircuitBreaker
-) : GraphQLQueryResolver {
     suspend fun cat(): Fact {
         val start = System.currentTimeMillis()
         val catFact = catCircuitBreaker.executeSuspendFunction  {
@@ -41,11 +45,10 @@ class CatFactQueryResolver(
         return Fact(
             fact = catFact.fact,
             length = catFact.length,
-            latency = calculateDuration(start)
+            latency = (System.currentTimeMillis() - start).toInt()
         )
     }
 }
 
 
-fun calculateDuration(timestamp: Long): Int =
-    (System.currentTimeMillis() - timestamp).toInt()
+
