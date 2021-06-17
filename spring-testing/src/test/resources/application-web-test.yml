@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    password: test
+    username: test
+    url: jdbc:postgresql://localhost:5432/postgres
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Change this in case you're using a local Docker Compose Testcontainers setup
+          # issuer-uri: http://localhost:8888/auth/realms/spring
+          issuer-uri: http://172.17.0.1:8888/auth/realms/spring
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  main:
+    allow-bean-definition-overriding: true
+cloud:
+  aws:
+    stack:
+      auto: false
+    region:
+      static: eu-central-1
+
+clients:
+  open-library:
+    base-url: OVERRIDEN_BY_TEST
+
+sqs:
+  book-synchronization-queue: default
