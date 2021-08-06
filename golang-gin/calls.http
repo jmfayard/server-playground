@@ -1,0 +1,64 @@
+GET http://localhost:8080/api/healthcheck
+Accept: application/json
+
+###
+GET http://localhost:8080/api/hello
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/timemachine/logs/mcfly
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users/register?username=jmf&password=password12345
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users/login?username=admin&password=password-password
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users/me?token=FpLSjFbcXoEFfRsW
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users/me?token=thisIsNotAValidToken
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users/login?username=admin&password=password-password
+Accept: application/json
+
+###
+GET http://localhost:8080/api/users
+Accept: application/json
+
+###
+GET https://api.github.com/events
+Accept: application/json
+
+###
+
+GET https://api.github.com/events
+#Authorization: Basic {{github_client_id}} {{github_client_secret}}
+
+###
+GET http://localhost:8080/api/github/feed
+Accept: application/json
+
+###
+GET http://localhost:8080/api/github/users/jmfayard
+Accept: application/json
+
+###
+GET http://api.github.com/users/jmfayard
+Accept: application/json
+
+###
+GET http://api.github.com/users/patrickestcool
+Accept: application/json

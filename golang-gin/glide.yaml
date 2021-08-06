@@ -1,0 +1,6 @@
+package: appstud.com/github-core
+import:
+  - package: appstud.com/github-core
+  - package: github.com/gin-gonic/gin
+    version: ^1.3.0
+  - package: github.com/monaco-io/request
