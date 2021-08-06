@@ -1,4 +1,4 @@
-# spring-playground
+# Server Playground
 
 Projects
 
