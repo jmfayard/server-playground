@@ -17,6 +17,7 @@ import io.ktor.request.*
 import kotlin.test.*
 import io.ktor.server.testing.*
 import jmfayard.dev.plugins.*
+import org.junit.jupiter.api.Test
 
 class ApplicationTest {
     @Test

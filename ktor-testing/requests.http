@@ -1,0 +1,6 @@
+###
+GET https://openlibrary.org/isbn/0873386035.json
+
+###
+GET https://openlibrary.org/authors/OL222379A.json
+

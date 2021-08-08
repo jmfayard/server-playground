@@ -1,0 +1,26 @@
+{
+  "publishers": [
+    "Kent State University Press"
+  ],
+  "number_of_pages": 248,
+  "isbn_10": [
+    "0873386035"
+  ],
+  "covers": [
+    663570
+  ],
+  "key": "/books/OL354251M",
+  "authors": [
+    {
+      "key": "/authors/OL222379A"
+    }
+  ],
+  "title": "George B. McClellan and Civil War history",
+  "subtitle": "in the shadow of Grant and Sherman",
+  "notes": "Includes bibliographical references (p. 239-242) and index.",
+  "subjects": [
+    "McClellan, George Brinton, 1826-1885 -- Military leadership.",
+    "Command of troops -- History -- 19th century.",
+    "United States -- History -- Civil War, 1861-1865 -- Campaigns."
+  ]
+}
