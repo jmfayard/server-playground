@@ -24,6 +24,7 @@ dependencies {
     implementation(Ktor.server.netty)
     implementation(Ktor.client.okHttp)
     implementation(Square.okHttp3.loggingInterceptor)
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:_")
     implementation("ch.qos.logback:logback-classic:_")
     testImplementation("io.ktor:ktor-server-tests:_")
     testImplementation("org.jetbrains.kotlin:kotlin-test:_")
