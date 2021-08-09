@@ -10,4 +10,4 @@ plugins {
     id("de.fayard.refreshVersions") version "0.11.1-SNAPSHOT"
 }
 
-rootProject.name = "ktor-testing"
+rootProject.name = "ktor-coding-challenge"
