@@ -8,6 +8,7 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import jmfayard.dev.plugins.dto.HealthCheck
+import jmfayard.dev.plugins.dto.easterEgg
 import jmfayard.dev.plugins.dto.timestamp
 
 fun Application.configureRouting() {
@@ -20,6 +21,9 @@ fun Application.configureRouting() {
         route("/api") {
             get("healthcheck") {
                 call.respond(HealthCheck("github-api", "1.0", timestamp()))
+            }
+            get("timemachine/logs/mcfly") {
+                call.respond(easterEgg())
             }
             get("/") {
                 call.respondText("Hello World!")
@@ -50,6 +54,7 @@ fun Application.configureRouting() {
         }
     }
 }
+
 
 @Location("/location/{name}")
 class MyLocation(val name: String, val arg1: Int = 42, val arg2: String = "default")
