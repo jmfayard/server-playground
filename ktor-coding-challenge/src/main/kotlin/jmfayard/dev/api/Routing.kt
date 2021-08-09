@@ -9,8 +9,10 @@ import io.ktor.locations.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import jmfayard.dev.api.GithubUser
 import jmfayard.dev.api.UserDaoInstance
 import jmfayard.dev.api.dto.*
+import jmfayard.dev.api.toUserInformation
 import jmfayard.dev.openlibrary.ktorClient
 
 fun Application.configureRouting() {
@@ -66,10 +68,31 @@ fun Application.configureRouting() {
 
         route("api/github") {
             get("feed") {
-                val stream = ktorClient.get<String>("https://api.github.com/users/jmfayard/events?page=1&per_page=1") {
-                    header("Accept", "application/vnd.github.v3+json")
+                try {
+                    val stream =
+                        ktorClient.get<String>("https://api.github.com/users/jmfayard/events?page=1&per_page=1") {
+                            header("Accept", "application/vnd.github.v3+json")
+                        }
+                    call.respondText(stream)
+                } catch (e: Throwable) {
+                    System.err.println("Exception $e while fetching the feed")
+                    call.respond(HttpStatusCode.NotFound, mapOf("error" to "Cannot fetch the feed"))
                 }
-                call.respondText(stream)
+
+            }
+
+            get("users/{actor}") {
+                val actor = call.parameters["actor"]
+                try {
+                    val user = ktorClient.get<GithubUser>("https://api.github.com/users/$actor") {
+                        header("Accept", "application/vnd.github.v3+json")
+                    }
+                    call.respond(user.toUserInformation())
+                } catch (e: Throwable) {
+                    System.err.println("Exception $e while fetching user informations for $actor")
+                    call.respond(HttpStatusCode.NotFound, mapOf("error" to "User $actor not found"))
+                }
+
             }
         }
 
