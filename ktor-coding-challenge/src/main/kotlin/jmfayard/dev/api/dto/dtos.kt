@@ -1,4 +1,4 @@
-package jmfayard.dev.plugins.dto
+package jmfayard.dev.api.dto
 
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable

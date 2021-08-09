@@ -2,7 +2,7 @@ package jmfayard.dev.openlibrary
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
-import jmfayard.dev.domain.Book
+import jmfayard.dev.openlibrary.domain.Book
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import java.io.File

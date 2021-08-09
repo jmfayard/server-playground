@@ -3,7 +3,7 @@ package jmfayard.dev.openlibrary
 
 import io.ktor.client.*
 import io.ktor.client.request.*
-import jmfayard.dev.domain.Book
+import jmfayard.dev.openlibrary.domain.Book
 
 suspend fun fetchBookInfos(
     isbn: String,

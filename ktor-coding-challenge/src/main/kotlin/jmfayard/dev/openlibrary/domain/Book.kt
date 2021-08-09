@@ -1,4 +1,4 @@
-package jmfayard.dev.domain
+package jmfayard.dev.openlibrary.domain
 
 data class Book(
     val id: Long,

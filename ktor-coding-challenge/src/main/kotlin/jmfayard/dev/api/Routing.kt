@@ -7,9 +7,9 @@ import io.ktor.http.content.*
 import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import jmfayard.dev.plugins.dto.HealthCheck
-import jmfayard.dev.plugins.dto.easterEgg
-import jmfayard.dev.plugins.dto.timestamp
+import jmfayard.dev.api.dto.HealthCheck
+import jmfayard.dev.api.dto.easterEgg
+import jmfayard.dev.api.dto.timestamp
 
 fun Application.configureRouting() {
     install(Locations) {
