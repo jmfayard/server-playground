@@ -13,3 +13,15 @@ fun easterEgg(): List<HealthCheck> = listOf(
     HealthCheck("I go to the future and my mom end up with the wrong guy", "2.0", 1445470140),
     HealthCheck("I go to the past and you will not believe what happens next", "3.0", Long.MIN_VALUE),
 )
+
+@Serializable
+data class UsernamePassword(val username: String, val password: String)
+
+@Serializable
+data class Username(val username: String)
+
+@Serializable
+data class Token(val token: String)
+
+@Serializable
+data class UsernameToken(val username: String, val token: String)

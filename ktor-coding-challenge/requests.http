@@ -9,3 +9,35 @@ GET http://localhost:8080/api/healthcheck
 
 ###
 GET http://localhost:8080/api/timemachine/logs/mcfly
+
+###
+POST http://localhost:8080/api/users/register
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "jmfayard",
+  "password": "1234567890"
+}
+
+###
+GET http://localhost:8080/api/users
+
+###
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "username": "jmfayard",
+  "password": "1234567890"
+}
+
+###
+POST http://localhost:8080/api/users/me
+Content-Type: application/json
+Accept: application/json
+
+{
+  "token": "494c7de1-faae-419e-a2f2-196b899c454a"
+}
