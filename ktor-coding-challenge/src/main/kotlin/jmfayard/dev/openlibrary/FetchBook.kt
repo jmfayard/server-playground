@@ -7,7 +7,7 @@ import jmfayard.dev.openlibrary.domain.Book
 
 suspend fun fetchBookInfos(
     isbn: String,
-    httpClient: HttpClient = client,
+    httpClient: HttpClient = ktorClient,
     baseUrl: String = "https://openlibrary.org"
 ): Book {
     // GET https://openlibrary.org/isbn/0873386035.json

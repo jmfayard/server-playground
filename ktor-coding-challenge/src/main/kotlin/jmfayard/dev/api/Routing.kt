@@ -1,6 +1,7 @@
 package jmfayard.dev.plugins
 
 import io.ktor.application.*
+import io.ktor.client.request.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.content.*
@@ -10,6 +11,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import jmfayard.dev.api.UserDaoInstance
 import jmfayard.dev.api.dto.*
+import jmfayard.dev.openlibrary.ktorClient
 
 fun Application.configureRouting() {
     install(Locations) {
@@ -59,6 +61,15 @@ fun Application.configureRouting() {
                 } else {
                     call.respond(usernameToken)
                 }
+            }
+        }
+
+        route("api/github") {
+            get("feed") {
+                val stream = ktorClient.get<String>("https://api.github.com/users/jmfayard/events?page=1&per_page=1") {
+                    header("Accept", "application/vnd.github.v3+json")
+                }
+                call.respondText(stream)
             }
         }
 
