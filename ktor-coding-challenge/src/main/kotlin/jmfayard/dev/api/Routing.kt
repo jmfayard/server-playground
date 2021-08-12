@@ -12,6 +12,7 @@ import jmfayard.dev.api.dto.easterEgg
 import jmfayard.dev.api.dto.timestamp
 import jmfayard.dev.api.github
 import jmfayard.dev.api.users
+import kotlinx.datetime.Clock
 
 fun Application.configureRouting() {
     install(Locations) {
@@ -45,6 +46,10 @@ fun Routing.heathcheck() {
     get("/api/healthcheck") {
         call.respond(HealthCheck("github-api", "1.0", timestamp()))
     }
+}
+
+object DI {
+    var clock: Clock = Clock.System
 }
 
 

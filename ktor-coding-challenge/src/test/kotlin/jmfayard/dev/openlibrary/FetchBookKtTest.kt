@@ -3,19 +3,8 @@ package jmfayard.dev.openlibrary
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import jmfayard.dev.openlibrary.domain.Book
-import okhttp3.mockwebserver.MockResponse
+import jmfayard.dev.util.jsonMockResponse
 import okhttp3.mockwebserver.MockWebServer
-import java.io.File
-
-fun jsonMockResponse(path: String, status: Int = 200, builder: MockResponse.() -> Unit = {}): MockResponse {
-    val testResources: File = File(".").absoluteFile.resolve("src/test/resources")
-    val json = testResources.resolve(path).readText()
-    return MockResponse()
-        .setResponseCode(status )
-        .setHeader("Content-Type", "application/json")
-        .setBody(json)
-        .apply(builder)
-}
 
 class FetchBookKtTest : StringSpec({
 
