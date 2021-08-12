@@ -1,113 +1,29 @@
 package jmfayard.dev.plugins
 
 import io.ktor.application.*
-import io.ktor.client.request.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.locations.*
-import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-import jmfayard.dev.api.GithubUser
-import jmfayard.dev.api.UserDaoInstance
-import jmfayard.dev.api.dto.*
-import jmfayard.dev.api.toUserInformation
-import jmfayard.dev.openlibrary.ktorClient
+import jmfayard.dev.api.dto.HealthCheck
+import jmfayard.dev.api.dto.easterEgg
+import jmfayard.dev.api.dto.timestamp
+import jmfayard.dev.api.github
+import jmfayard.dev.api.users
 
 fun Application.configureRouting() {
     install(Locations) {
     }
 
-
-
     routing {
-        route("/api") {
-            get("healthcheck") {
-                call.respond(HealthCheck("github-api", "1.0", timestamp()))
-            }
-            get("timemachine/logs/mcfly") {
-                call.respond(easterEgg())
-            }
-        }
-        route("/api/users") {
-            post("/register") {
-                val usernamePassword = call.receive<UsernamePassword>()
-                val usernameToken = UserDaoInstance.createUser(usernamePassword)
-                if (usernameToken == null) {
-                    call.respond(HttpStatusCode.Unauthorized)
-                } else {
-                    call.respond(usernameToken)
-                }
-            }
+        heathcheck()
+        users()
+        github()
 
-            get {
-                call.respond(UserDaoInstance.listRegisteredUsers())
-            }
-
-            post("login") {
-                val token = call.receive<Token>()
-                val username = UserDaoInstance.userByToken(token)
-                if (username == null) {
-                    call.respond(HttpStatusCode.Unauthorized)
-                } else {
-                    call.respond(username)
-                }
-            }
-
-            post("me") {
-                val token = call.receive<Token>()
-                val usernameToken = UserDaoInstance.userByToken(token)
-                if (usernameToken == null) {
-                    call.respond(HttpStatusCode.Unauthorized)
-                } else {
-                    call.respond(usernameToken)
-                }
-            }
-        }
-
-        route("api/github") {
-            get("feed") {
-                try {
-                    val stream =
-                        ktorClient.get<String>("https://api.github.com/users/jmfayard/events?page=1&per_page=1") {
-                            header("Accept", "application/vnd.github.v3+json")
-                        }
-                    call.respondText(stream)
-                } catch (e: Throwable) {
-                    System.err.println("Exception $e while fetching the feed")
-                    call.respond(HttpStatusCode.NotFound, mapOf("error" to "Cannot fetch the feed"))
-                }
-
-            }
-
-            get("users/{actor}") {
-                val actor = call.parameters["actor"]
-                try {
-                    val user = ktorClient.get<GithubUser>("https://api.github.com/users/$actor") {
-                        header("Accept", "application/vnd.github.v3+json")
-                    }
-                    call.respond(user.toUserInformation())
-                } catch (e: Throwable) {
-                    System.err.println("Exception $e while fetching user informations for $actor")
-                    call.respond(HttpStatusCode.NotFound, mapOf("error" to "User $actor not found"))
-                }
-
-            }
-        }
-
-        get("/") {
-            call.respondText("Hello World!")
-        }
-        get<MyLocation> {
-            call.respondText("Location: name=${it.name}, arg1=${it.arg1}, arg2=${it.arg2}")
-        }
-        // Register nested routes
-        get<Type.Edit> {
-            call.respondText("Inside $it")
-        }
-        get<Type.List> {
-            call.respondText("Inside $it")
+        get("/api/timemachine/logs/mcfly") {
+            call.respond(easterEgg())
         }
         // Static plugin. Try to access `/static/index.html`
         static("/static") {
@@ -122,6 +38,12 @@ fun Application.configureRouting() {
             }
 
         }
+    }
+}
+
+fun Routing.heathcheck() {
+    get("/api/healthcheck") {
+        call.respond(HealthCheck("github-api", "1.0", timestamp()))
     }
 }
 
