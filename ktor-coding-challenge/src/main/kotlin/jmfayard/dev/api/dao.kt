@@ -16,6 +16,19 @@ import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
+fun main() {
+    Database.connect("jdbc:h2:mem:users")
+    transaction {
+        addLogger(StdOutSqlLogger)
+        SchemaUtils.create(Users, Sessions)
+        User.new {
+            username = "jmfayard"
+            password = "1234"
+        }
+        println(User.all().toList())
+    }
+}
+
 val UserDaoInstance: UserDao by lazy { SqlUserDao() }
 
 interface UserDao {
@@ -26,16 +39,11 @@ interface UserDao {
 }
 
 class SqlUserDao() : UserDao {
-    init {
-        Database.connect("jdbc:h2:mem:users")
-        transaction {
-            addLogger(StdOutSqlLogger)
-            SchemaUtils.create(Users, Sessions)
-        }
-    }
 
     override fun listRegisteredUsers(): List<Username> =
-        User.all().map { Username(it.username) }
+        transaction {
+            User.all().map { Username(it.username) }
+        }
 
     fun createRandomToken(): String =
         UUID.randomUUID().toString()
@@ -44,11 +52,13 @@ class SqlUserDao() : UserDao {
         try {
             val user = User.find { Users.username eq usernamePassword.username }.single()
             if (user.password == usernamePassword.password) {
-                val session = Session.new {
-                    username = usernamePassword.username
-                    token = createRandomToken()
+                return transaction {
+                    val session = Session.new {
+                        username = usernamePassword.username
+                        token = createRandomToken()
+                    }
+                    UsernameToken(session.username, session.token)
                 }
-                return UsernameToken(session.username, session.token)
             } else {
                 return null
             }
@@ -57,12 +67,12 @@ class SqlUserDao() : UserDao {
         }
     }
 
-    override fun userByToken(token: Token): Username? {
+    override fun userByToken(token: Token): Username? = transaction {
         try {
             val user = Session.find { Sessions.token eq token.token }.single()
-            return Username(user.username)
+            Username(user.username)
         } catch (e: NoSuchElementException) {
-            return null
+            null
         }
     }
 

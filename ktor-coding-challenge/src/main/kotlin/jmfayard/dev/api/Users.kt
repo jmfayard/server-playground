@@ -25,12 +25,12 @@ fun Routing.users() {
         }
 
         post("login") {
-            val token = call.receive<Token>()
-            val username = UserDaoInstance.userByToken(token)
-            if (username == null) {
+            val usernamePassword = call.receive<UsernamePassword>()
+            val token = UserDaoInstance.loginUser(usernamePassword)
+            if (token == null) {
                 call.respond(HttpStatusCode.Unauthorized)
             } else {
-                call.respond(username)
+                call.respond(token)
             }
         }
 
