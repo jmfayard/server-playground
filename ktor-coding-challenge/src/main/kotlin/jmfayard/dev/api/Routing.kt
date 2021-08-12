@@ -15,6 +15,7 @@ import jmfayard.dev.api.users
 import kotlinx.datetime.Clock
 
 fun Application.configureRouting() {
+
     install(Locations) {
     }
 

@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     implementation( "io.ktor:ktor-server-core:_")
-    implementation( "io.ktor:ktor-locations:_")
+    implementation("io.ktor:ktor-locations:_")
     implementation("io.ktor:ktor-server-host-common:_")
     implementation("io.ktor:ktor-mustache:_")
     implementation(Ktor.features.serialization)
@@ -26,6 +26,13 @@ dependencies {
     implementation(Square.okHttp3.loggingInterceptor)
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:_")
     implementation("ch.qos.logback:logback-classic:_")
+
+    implementation("org.jetbrains.exposed:exposed-core:_")
+    implementation("org.jetbrains.exposed:exposed-dao:_")
+    implementation("org.jetbrains.exposed:exposed-java-time:_")
+    implementation("org.jetbrains.exposed:exposed-jdbc:_")
+    implementation("com.h2database:h2:_")
+
     testImplementation("io.ktor:ktor-server-tests:_")
     testImplementation("org.jetbrains.kotlin:kotlin-test:_")
     testImplementation(Testing.kotest.assertions.ktor)

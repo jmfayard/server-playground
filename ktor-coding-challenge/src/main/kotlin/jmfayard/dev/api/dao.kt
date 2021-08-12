@@ -5,9 +5,18 @@ import jmfayard.dev.api.dto.Username
 import jmfayard.dev.api.dto.UsernamePassword
 import jmfayard.dev.api.dto.UsernameToken
 import kotlinx.serialization.Serializable
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
-val UserDaoInstance: UserDao by lazy { InMemoryUserDao() }
+val UserDaoInstance: UserDao by lazy { SqlUserDao() }
 
 interface UserDao {
     fun listRegisteredUsers(): List<Username>
@@ -16,40 +25,90 @@ interface UserDao {
     fun createUser(usernamePassword: UsernamePassword): UsernameToken?
 }
 
-class InMemoryUserDao : UserDao {
-    val users = mutableListOf<UsernamePassword>()
-    val usersMap = mutableMapOf<String, String>()
-    val sessions = mutableMapOf<String, Username>()
+class SqlUserDao() : UserDao {
+    init {
+        Database.connect("jdbc:h2:mem:users")
+        transaction {
+            addLogger(StdOutSqlLogger)
+            SchemaUtils.create(Users, Sessions)
+        }
+    }
+
+    override fun listRegisteredUsers(): List<Username> =
+        User.all().map { Username(it.username) }
 
     fun createRandomToken(): String =
         UUID.randomUUID().toString()
 
-    override fun listRegisteredUsers(): List<Username> {
-        return users.map { Username(it.username) }
-    }
-
     override fun loginUser(usernamePassword: UsernamePassword): UsernameToken? {
-        val actualPassword = usersMap[usernamePassword.username] ?: return null
-        if (actualPassword != usernamePassword.password) return null
-        val token = createRandomToken()
-        sessions[token] = Username(usernamePassword.username)
-        return UsernameToken(usernamePassword.username, token)
+        try {
+            val user = User.find { Users.username eq usernamePassword.username }.single()
+            if (user.password == usernamePassword.password) {
+                val session = Session.new {
+                    username = usernamePassword.username
+                    token = createRandomToken()
+                }
+                return UsernameToken(session.username, session.token)
+            } else {
+                return null
+            }
+        } catch (e: NoSuchElementException) {
+            return null
+        }
     }
 
     override fun userByToken(token: Token): Username? {
-        return sessions[token.token]
+        try {
+            val user = Session.find { Sessions.token eq token.token }.single()
+            return Username(user.username)
+        } catch (e: NoSuchElementException) {
+            return null
+        }
     }
 
-    override fun createUser(usernamePassword: UsernamePassword): UsernameToken? {
-        if (usernamePassword.invalidPassword()) return null
-        if (usersMap[usernamePassword.username] != null) return null
-        val token = createRandomToken()
-        sessions[token] = Username(usernamePassword.username)
-        usersMap[usernamePassword.username] = usernamePassword.password
-        users.add(usernamePassword)
-        return UsernameToken(usernamePassword.username, token)
+    override fun createUser(usernamePassword: UsernamePassword): UsernameToken? = transaction {
+        if (usernamePassword.invalidPassword()) return@transaction null
+
+        val iterable = User.find { Users.username eq usernamePassword.username }
+        if (iterable.empty().not()) return@transaction null
+
+        User.new {
+            username = usernamePassword.username
+            password = usernamePassword.password
+        }
+
+        val session = Session.new {
+            username = usernamePassword.username
+            token = createRandomToken()
+        }
+        UsernameToken(session.username, session.token)
     }
 }
+
+object Users : IntIdTable() {
+    val username = varchar("username", 100).index()
+    val password = varchar("password", 50)
+}
+
+object Sessions : IntIdTable() {
+    val username = varchar("username", 100).index()
+    val token = varchar("token", 50).index()
+}
+
+class User(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<User>(Users)
+
+    var username by Users.username
+    var password by Users.password
+}
+
+class Session(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Session>(Sessions)
+
+    var username by Sessions.username
+    var token by Sessions.token
+}
+
 
 fun UsernamePassword.invalidPassword(): Boolean =
     password.count() <= 7
